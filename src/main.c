@@ -12,8 +12,9 @@
  *（Single-threaded）Manually using 3 threads, CPU occupation stays around 52%
  *(Multi-threaded)Now:
  *verified domain:   runtime(not including generating Pn table)
- *2~1e8(7,21,181440) 76556ms
- *2~1e9(above three)  11615903ms
+ *2~1e8(7,21,181440)         76556ms
+ *2~1e9(above three)         11615903ms
+ *2~1610099952(above three)  17844241ms
  *
  * Update:
  * 2019-08-16 Johnzchgrd:
@@ -21,15 +22,18 @@
  *     product property.
  * 2019-08-17 Johnzchgrd
  *     change to `Makefile` mode to have a better developing structure.
- * 2019-08-22
+ * 2019-08-22 Johnzchgrd
  *     verified new domain.
+ * 2019-09-07 Jonzchgrd
+ *    deprecate function `getLastNum()` in replace of getNum()
+ *    verified new domain.
  * 
  */
 
 /*TODO
  * 1.Add pthread_cancel
  * 2.Check functions' return value to eliminate warnings thrown by the Compiler.
- * 3.add filename:line to functions' debug info.
+ * 3.add filename:line to functions' debug info(when DEBUG is defined).
  * 
  */
 
@@ -50,6 +54,11 @@ int main(int argc, char *argv[])
 	// hide caret
 	printf("\033[?25l");
 #endif //SHOE_PROGRESS
+#ifndef _TIME_C_
+	char time_now[DATE_LENGTH];
+	getTimeNow_str(time_now);
+	printf("Start time is: %s.\n", time_now);
+#endif // _TIME_C_
 	switch (argv[1][0])
 	{
 	case '0':
@@ -66,10 +75,19 @@ int main(int argc, char *argv[])
 	case '3':
 		printf("Legal Pn table file Check: %d.\n", checkLegal(PNFILE, 1));
 		break;
+#ifdef DEBUG
+	case '4':
+		printf("Get last number check: %llu.\n", getLastNum(fopen(PNFILE, "r")));
+		break;
+#endif // DEBUG
 	default:
 		printf("Invalid argument!\n");
 		break;
 	}
+#ifndef _TIME_C_
+	getTimeNow_str(time_now);
+	printf("Terminate time is: %s.\n", time_now);
+#endif // _TIME_C_
 #ifdef SHOW_PROGRESS
 	// show caret
 	printf("\033[?25h");

@@ -129,6 +129,7 @@ all: $(BIN_PATH)/$(BIN_NAME)
 
 # Link the executable
 $(BIN_PATH)/$(BIN_NAME): $(OBJECTS)
+	$(CMD_PREFIX)-rm $(BUILD_PATH)/$(LIB_NAME)
 	$(CMD_PREFIX)ln -s ../../../lib/$(BIN_PATH)/$(LIB_NAME) $(BUILD_PATH)/$(LIB_NAME) 
 	@echo ">>>Linking: $@"
 	@$(START_TIME)

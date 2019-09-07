@@ -44,7 +44,7 @@ void getTimeNow_str(char Time[])
 	struct tm *timenow; //define struct to store time information
 	time(&now);
 	timenow = localtime(&now);
-	//yyyy-mm-dd hh-mm-ss\0
+	//yyyy-mm-dd hh-mm-ss\0 = DATE_LENGTH
 	sprintf(Time, "%04d-%02d-%02d %02d:%02d:%02d",
 			timenow->tm_year + 1900,
 			timenow->tm_mon + 1,

@@ -7,17 +7,17 @@
 
 typedef unsigned long long RANGE; // if modified, IO format
                                   //for printf&scanf should too.
-
+#define SHOW_PROGRESS
 //main threads func settings.
 #define START 2 //!currently don't support other begin point because of we'reusing Pn table to locate.
-#define DELTA (RANGE)10000
+#define DELTA (RANGE)161009995
 #define THREADS 10
 //pn tab gen threads settings.
-#undef _NO_DEFAULT_ //NOTE define this to generate Pn table starts from any number legally allowed.
+#define _NO_DEFAULT_ //NOTE define this to generate Pn table starts from any number legally allowed.
 #ifdef _NO_DEFAULT_
-#define GEN_START (RANGE)200
-#define GEN_DELTA (RANGE)10000
-#define GEN_THREADS 1
+#define GEN_START (RANGE)1610099973
+#define GEN_DELTA (RANGE)10000000
+#define GEN_THREADS 100
 #else //_NO_DEFAULT_
 #define GEN_START START
 #define GEN_DELTA DELTA
@@ -85,6 +85,7 @@ typedef struct
 #ifndef GEN_ONLY
 // functions in .so
 #ifndef _TIME_C_
+#define DATE_LENGTH 20
 long getDateNow(void);
 long getTimeNow_long(void);
 void getTimeNow_str(char Time[]);
@@ -105,7 +106,7 @@ RANGE getPn(RANGE start, RANGE end);
 void initPnTab(RANGE begin, RANGE delta);
 int checkLegal(const char filename[], int mode);
 void finiPnTab(RANGE begin, RANGE delta);
-RANGE getNextPrime(RANGE thisone);
+RANGE getNum(FILE *fp, int index);
 #endif // _PRIME_C_
 
 #ifndef _ERR_HANDLE_C_

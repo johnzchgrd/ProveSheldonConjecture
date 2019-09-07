@@ -41,7 +41,9 @@ RANGE getPn(RANGE start, RANGE end)
     FILE *fp = fopen(PNFILE, "rb");
     if (fp == NULL)
     {
-        fprintf(stderr, "***Error: No \"%s\" found in current dir!\n", PNFILE);
+        fprintf(stderr,
+                "***Error: No \"%s\" found in current dir!\n",
+                PNFILE);
         exit(FILE_EXIST);
     }
     RANGE Pn = 0, TMP;
@@ -78,7 +80,7 @@ static void *partialPnTab(void *arg)
     RANGE termi = STDTERMI;
     for (RANGE i = pn->start; i <= pn->end; i++)
     {
-#ifdef SHIOW_PROGRESS
+#ifdef SHOW_PROGRESS
         // update progress
         pn->pm->current_cnt++;
         printf("\rAll: %.3Lf%%, thread: %d/%d",
@@ -121,7 +123,10 @@ static void MultiThreadforPn(PnTab threads_info[])
     for (int i = 0; i < GEN_THREADS; i++)
     {
         // make sure thread created success.
-        if (pthread_create(&thread_id[i], NULL, partialPnTab, &threads_info[i]) != 0)
+        if (pthread_create(&thread_id[i],
+                           NULL,
+                           partialPnTab,
+                           &threads_info[i]) != 0)
         {
             fprintf(stderr, "***cannot create thread %d!\n", i);
             exit(THREAD_CREATE);
@@ -220,35 +225,37 @@ void initPnTab(RANGE begin, RANGE delta)
 /* ──────────────────────────────────────────────────────────────────────────────── */
 
 /* ----------------------------- legality check ----------------------------- */
-        /*
+/*
          * ────────────────────────────────────────────────────────────────────────────────────── I ──────────
          *   :::::: U S E F U L   S I M P L E   F U N C T I O N S : :  :   :    :     :        :          :
          * ────────────────────────────────────────────────────────────────────────────────────────────────
          */
 
 /**
- * @brief Get the Last Number in the file(using file handle)
+ * @brief Get the `index` Number in the file(using file handle)
  * NOTE need to be in READ mode
  * @param fp file handle
+ * @param index the index of number required
  * @return RANGE last number
  */
-static RANGE getLastNum(FILE *fp)
+RANGE getNum(FILE *fp, int index)
 {
-    RANGE last;
+    RANGE num;
     long CurPos;
 #ifdef DEBUG
     printf(">>>%s:", __PRETTY_FUNCTION__);
 #endif // DEBUG
     // remeber where the curpos is
     CurPos = ftell(fp);
-    fseek(fp, -sizeof(RANGE), SEEK_END);
-    fread(&last, sizeof(last), 1, fp);
+    if (index < 0)
+        fseek(fp, index * sizeof(RANGE), SEEK_END);
+    else
+        fseek(fp, index * sizeof(RANGE), SEEK_SET);
+    fread(&num, sizeof(num), 1, fp);
+
     // restore curpos
     fseek(fp, CurPos, SEEK_SET);
-#ifdef DEBUG
-    printf("fp: %p -> last number: %llu\n", fp, last);
-#endif // DEBUG
-    return last;
+    return num;
 }
 //returns nonzero if PNFILE is legal(ended with STDTERMI).
 int checkLegal(const char filename[], int mode)
@@ -262,10 +269,11 @@ int checkLegal(const char filename[], int mode)
         fprintf(stderr, "***cannot READ \"%s\"!\n", filename);
         exit(FILE_READ);
     }
-    RANGE previous, thisone, lastone = END;
+    RANGE previous, thisone, lastone = getNum(fp, -2);
     int legal = 1; //default as legal
     fread(&previous, sizeof(RANGE), 1, fp);
     thisone = previous;
+    printf("Check Start at %llu.\n", thisone);
     switch (mode)
     {
         /*
@@ -274,8 +282,7 @@ int checkLegal(const char filename[], int mode)
          * ────────────────────────────────────────────────────────────────────────────
          */
 
-        
-    case 0:
+    case 0: // simple mode
         printf("in FAST Mode\n");
         while (1)
         {
@@ -290,7 +297,8 @@ int checkLegal(const char filename[], int mode)
             fread(&thisone, sizeof(RANGE), 1, fp);
             if (thisone <= previous)
             {
-                fprintf(stderr, "***thisone(%llu) should be greater than previous(%llu)!\n",
+                fprintf(stderr, "***thisone(%llu) should be \
+greater than previous(%llu)!\n",
                         thisone,
                         previous);
                 exit(PNTAB_ILLEGAL);
@@ -298,7 +306,7 @@ int checkLegal(const char filename[], int mode)
             previous = thisone;
         }
         break;
-    case 1:
+    case 1: // serious mode
         printf("in SECURE Mode\n");
         while (1) // TODO change this to multi-thread
         {
@@ -311,20 +319,21 @@ int checkLegal(const char filename[], int mode)
             }
             if (prime(thisone) == 0)
             {
-                fprintf(stderr, "***thisone(%llu) is not a prime!.\n", thisone);
+                fprintf(stderr, "***thisone(%llu) is not a prime!\n", thisone);
                 exit(PNTAB_ILLEGAL);
             }
             fread(&thisone, sizeof(RANGE), 1, fp);
             if (thisone <= previous)
             {
-                fprintf(stderr, "***thisone(%llu) should be greater than previous(%llu)!\n",
+                fprintf(stderr, "***thisone(%llu) should be \
+greater than previous(%llu)!\n",
                         thisone,
                         previous);
                 exit(PNTAB_ILLEGAL);
             }
 
 #ifdef SHOW_PROGRESS
-            printf("\rProgress: %.3lf%%", (double)thisone / lastone);
+            printf("\rProgress: %.3lf%%", (double)previous * 100 / lastone);
 #endif // SHOW_PROGRESS
             previous = thisone;
         }
@@ -333,6 +342,7 @@ int checkLegal(const char filename[], int mode)
         printf("Unkown mode.\n");
         break;
     }
+    printf("\nCheck End at %llu.\n", lastone);
     fclose(fp);
     return legal; //nonzero return if legal
 }
@@ -377,7 +387,7 @@ void finiPnTab(RANGE begin, RANGE delta)
         printf("\rCreating Thread %d.", i);
         char FileNameTmp[20];
         sprintf(FileNameTmp, TMPFILEFMT, i);
-        fp = fopen(FileNameTmp, "ab+"); // not ab because getLastNum() need READ access.
+        fp = fopen(FileNameTmp, "ab+"); // not ab because getNum() need READ access.
         if (fp == NULL)
         {
             fprintf(stderr, "***cannot ADD to \"%s\"!\n", FileNameTmp);
@@ -385,10 +395,7 @@ void finiPnTab(RANGE begin, RANGE delta)
         }
         // initialize
         threads_info[i].id = i;
-        threads_info[i].start = getNextPrime(getLastNum(fp));
-#ifdef DEBUG
-        printf(">>>getLastNum(fp):%llu, getNextPrime retval:%llu\n", getLastNum(fp), threads_info[i].start);
-#endif // DEBUG
+        threads_info[i].start = getNextPrime(getNum(fp, -1));
         threads_info[i].end = end;
         threads_info[i].newdelta = GEN_THREADS * delta;
         threads_info[i].fp = fp;
@@ -396,6 +403,7 @@ void finiPnTab(RANGE begin, RANGE delta)
         end += delta;
     }
     MultiThreadforPn(threads_info);
-    printf("<--Temp Pn Table file finished!\nLegal check result: %d.\n", checkLegal(PNFILE, 0));
+    printf("<--Temp Pn Table file finished!\nLegal check result: %d.\n",
+           checkLegal(PNFILE, 0));
 }
 /* ──────────────────────────────────────────────────────────────────────────────── */

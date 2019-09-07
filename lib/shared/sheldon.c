@@ -83,7 +83,7 @@ void *SingleProcess(void *arg)
     //仿佛听到了CPU的咆哮声……
     for (index = inter->start; index <= inter->end; index++)
     {
-#ifdef SHIOW_PROGRESS
+#ifdef SHOW_PROGRESS
         printf("\rAll: %.3Lf%%, thread: %d/%d",
                (long double)inter->pm->current_cnt * 100 / (END - START),
                inter->pm->fini_threads_cnt,
@@ -102,7 +102,7 @@ void *SingleProcess(void *arg)
             }
         }
     }
-#ifdef SHIOW_PROGRESS
+#ifdef SHOW_PROGRESS
     inter->pm->fini_threads_cnt++;
     printf("\rAll: %.3Lf%%, thread: %d/%d",
            (long double)inter->pm->current_cnt * 100 / (END - START),
@@ -130,8 +130,8 @@ void MultiThread(void *arg)
     FILE *fp = fopen(OUTFILE, "w");
     if (fp == NULL)
     {
-        fprintf(stderr, "***Error: cannot ADD to \"%s\"!\n", OUTFILE);
-        exit(FILE_READ);
+        fprintf(stderr, "***Error: cannot WRITE \"%s\"!\n", OUTFILE);
+        exit(FILE_WRITE);
     }
     fprintf(fp, "Integers With Product Property in [%d, %llu].\n", START, END);
     char buffer_time_now[20];
