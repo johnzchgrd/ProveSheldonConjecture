@@ -75,11 +75,6 @@ int main(int argc, char *argv[])
 	case '3':
 		printf("Legal Pn table file Check: %d.\n", checkLegal(PNFILE, 1));
 		break;
-#ifdef DEBUG
-	case '4':
-		printf("Get last number check: %llu.\n", getLastNum(fopen(PNFILE, "r")));
-		break;
-#endif // DEBUG
 	default:
 		printf("Invalid argument!\n");
 		break;

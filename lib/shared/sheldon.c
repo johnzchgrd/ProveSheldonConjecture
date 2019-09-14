@@ -13,7 +13,7 @@
  */
 RANGE fastproduction(RANGE product, char bit)
 {
-    //传入bit范围2~9，手动加速
+    //传入bit范围2~9，手动加逄1�7
     //gcc可能会优化，写着玩玩
     switch (bit)
     {
@@ -33,22 +33,22 @@ RANGE fastproduction(RANGE product, char bit)
         return product + (product << 3);
     default:
         printf("\n***Error: calculating %llu x %hhd.\n", product, bit);
-        exit(INTERAL_ERROR);
+        exit(INTERNAL_ERROR);
     }
 }
 #endif // USE_FAST_PRODUCTION
 int ProductProperty(RANGE primenumber, RANGE prime)
 {
-    RANGE product = 1; //保存乘积。乘法运算的化简是降低O(T(N))的必由之路
-    char smallest_bit; //从最低位开始，向高位提取，逐一向右移动所有位，遇到0直接跳出循环
+    RANGE product = 1; //保存乘积。乘法运算的化简是降低O(T(N))的必由之跄1�7
+    char smallest_bit; //从最低位弢�始，向高位提取，逐一向右移动扢�有位，遇刄1�70直接跳出循环
 
-    //分解传入的素数
+    //分解传入的素敄1�7
     while (prime != 0)
     {
         smallest_bit = prime % 10; //取最小位
 #ifdef USE_FAST_PRODUCTION
         if (smallest_bit == 0)
-            return 0; //考虑实际意义，直接返回即可；1不用改变product的值
+            return 0; //考虑实际意义，直接返回即可；1不用改变product的��1�7
         //core
         if (smallest_bit > 2)
             product = fastproduction(product, smallest_bit);
@@ -59,10 +59,10 @@ int ProductProperty(RANGE primenumber, RANGE prime)
         product *= smallest_bit;
 #endif // USE_FAST_PRODUCTION
 
-        prime /= 10; //向右移动一位
+        prime /= 10; //向右移动丢�佄1�7
     }
 
-    //比较乘积与序号是否相同
+    //比较乘积与序号是否相各1�7
     if (product == primenumber)
         return 1;
     else
@@ -71,8 +71,8 @@ int ProductProperty(RANGE primenumber, RANGE prime)
 void *SingleProcess(void *arg)
 {
     Sheldon *inter = arg;
-    RANGE index, primenumber = inter->initialPn; //遍历参数，第n个素数
-    int sheldonflag = 0;                         //是否为Sheldon素数的标志
+    RANGE index, primenumber = inter->initialPn; //遍历参数，第n个素敄1�7
+    int sheldonflag = 0;                         //是否为Sheldon素数的标忄1�7
     FILE *fp = fopen(OUTFILE, "a");
     if (fp == NULL)
     {
@@ -80,7 +80,7 @@ void *SingleProcess(void *arg)
         exit(FILE_READ);
     }
     printf("\rThread %d, range: [%llu, %llu].\n", inter->id, (inter->start), (inter->end));
-    //仿佛听到了CPU的咆哮声……
+    //仿佛听到了CPU的咆哮声…��1�7
     for (index = inter->start; index <= inter->end; index++)
     {
 #ifdef SHOW_PROGRESS

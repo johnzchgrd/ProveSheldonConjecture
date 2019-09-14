@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef __linux__
 #include <pthread.h> //! Windows MAY not *natively* support this.
+#endif
 #include <time.h>
 #include <assert.h>
 #include <math.h>
@@ -10,14 +12,14 @@ typedef unsigned long long RANGE; // if modified, IO format
 #define SHOW_PROGRESS
 //main threads func settings.
 #define START 2 //!currently don't support other begin point because of we'reusing Pn table to locate.
-#define DELTA (RANGE)161009995
+#define DELTA (RANGE)10000
 #define THREADS 10
 //pn tab gen threads settings.
 #define _NO_DEFAULT_ //NOTE define this to generate Pn table starts from any number legally allowed.
 #ifdef _NO_DEFAULT_
-#define GEN_START (RANGE)1610099973
-#define GEN_DELTA (RANGE)10000000
-#define GEN_THREADS 100
+#define GEN_START (RANGE)2010099973
+#define GEN_DELTA (RANGE)   100000
+#define GEN_THREADS 10
 #else //_NO_DEFAULT_
 #define GEN_START START
 #define GEN_DELTA DELTA
@@ -47,7 +49,7 @@ enum ErrorTable
     THREAD_CREATE,    // thread_create returns zero
     THREAD_JOIN,      // unused
     PNTAB_ILLEGAL,    // used in checkLegal function
-    INTERAL_ERROR     // internal functional problem, suggested to use when add a new function
+    INTERNAL_ERROR    // internal functional problem, suggested to use when add a new function
 };
 
 // arguments to transfer
