@@ -113,13 +113,14 @@ void *SingleProcess(void *arg)
     printf("\rThread %d finished. Find %d.\n", inter->id, inter->cnt);
 #endif // SHOW_MODE == 1
     fclose(fp);
+    return NULL; // to avoid warning.
 }
 void MultiThread(void *arg)
 {
 #ifdef DEBUG
     printf(">>>%s:", __PRETTY_FUNCTION__);
 #endif // DEBUG
-    (Sheldon *)arg;
+    arg = (Sheldon *)arg;
     pthread_t thread_id[THREADS];
     int total = 0;
     Sheldon threads_info[THREADS];

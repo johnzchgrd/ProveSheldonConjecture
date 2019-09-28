@@ -2,7 +2,7 @@
 
 /* --------------------------------- GENERAL -------------------------------- */
 /**
- * @brief 鍒ゆ柇鏄惁涓虹礌鏁�
+ * @brief §ç??§è??§è??§ç??§æ§ª§¬§é§¥?§è??1?7
  * 
  * @param m 
  * @return int isprime->1, nonprime->0
@@ -22,11 +22,11 @@ int prime(RANGE m)
         return 0;
 }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/* §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å */
 
 /* --------------------------- Pn table functions --------------------------- */
 /*
- * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ GETPN 鈹€鈹€鈹€鈹€鈹€
+ * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å GETPN §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
  */
 /**
  * @brief Get the start Pn index of 
@@ -49,11 +49,11 @@ RANGE getPn(RANGE start, RANGE end)
     RANGE Pn = 0, TMP;
     while (1)
     {
-        fread(&TMP, sizeof(RANGE), 1, fp);
+        MYFREAD(&TMP, sizeof(RANGE), 1, fp);
         if (TMP == STDTERMI || feof(fp))
             break;
         // place A
-        if (TMP >= start)
+        if (TMP >= start && TMP <= end) // may have problem
             break;
         Pn++; //NOTE why not place A? To avoid conflict of duplication while accumulating Pn.
     }
@@ -65,12 +65,12 @@ RANGE getPn(RANGE start, RANGE end)
     return Pn;
 }
 /*
- * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ SINGLE TASK FOR MULTI-THREAD 鈹€鈹€鈹€鈹€鈹€
+ * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å SINGLE TASK FOR MULTI-THREAD §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
  */
 
 /**
- * @brief 姹傛寚瀹氬尯闂寸礌鏁�
- * REVIEW Change toThe Sieve of Eratosthenes
+ * @brief §è§¢?§è??§ç??§ç?§¬§ë?§¥§é§¥?§è??1?7
+ * REVIEW Change to The Sieve of Eratosthenes
  * @param arg 
  * @return void* unused
  */
@@ -78,7 +78,7 @@ static void *partialPnTab(void *arg)
 {
     PnTab *pn = arg;
     RANGE termi = STDTERMI;
-    for (RANGE i = pn->start; i <= pn->end; i++)
+    for (RANGE i = pn->start; i < pn->end; i++)
     {
 #ifdef SHOW_PROGRESS
         // update progress
@@ -111,6 +111,7 @@ static void *partialPnTab(void *arg)
            pn->pm->fini_threads_cnt,
            GEN_THREADS);
 #endif // SHIOW_PROGRESS
+    return NULL; // to avoid warning.
 }
 
 static void MultiThreadforPn(PnTab threads_info[])
@@ -155,10 +156,10 @@ static void MultiThreadforPn(PnTab threads_info[])
         fcolse(fp);
     }
 #else
-    system("cat tmp/* >" PNFILE);
+    MYSYSTEM("cat tmp/* >" PNFILE);
     printf("\n%s created.\n", PNFILE);
 #ifndef DEBUG
-    system("rm -f tmp/*");
+    MYSYSTEM("rm -f tmp/*");
     printf("tmp files removed.\n");
 #endif // DEBUG
 #endif // _ALL_LEGAL_
@@ -166,16 +167,17 @@ static void MultiThreadforPn(PnTab threads_info[])
 
 void initPnTab(RANGE begin, RANGE delta)
 {
-    RANGE stop = begin + delta * GEN_THREADS, termi = STDTERMI;
+    RANGE stop = begin + delta * GEN_THREADS;
 #ifdef DEBUG
     printf(">>>%s:", __PRETTY_FUNCTION__);
 #endif // DEBUG
-    printf("-->Generating Pn Tab.\nThreads=%d, Range=[%llu, %llu].\n",
+    printf("-->Generating Pn Tab.\nThreads=%d, Range=[%llu, %llu).\n",
            GEN_THREADS,
            begin,
            stop);
 #ifdef GEN_MODE_SINGLE //when generating small numbers, it's even faster!
     FILE *pnfp = fopen(PNFILE, "wb");
+    RANGE termi = STDTERMI;
 
     for (RANGE i = begin; i <= stop; i++)
     {
@@ -195,7 +197,7 @@ void initPnTab(RANGE begin, RANGE delta)
     RANGE start = begin, end = begin + delta;
     // single PM
     ProgManager pm = {0ULL, 0, 0};
-    system("mkdir tmp");
+    MYSYSTEM("mkdir tmp");
     for (int i = 0; i < GEN_THREADS; i++)
     {
         // open different file for async write
@@ -222,13 +224,13 @@ void initPnTab(RANGE begin, RANGE delta)
     printf("<--Pn Table Generated.\n");
 #endif // GEN_MODE_SINGLE
 }
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/* §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å */
 
 /* ----------------------------- legality check ----------------------------- */
 /*
-         * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ I 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+         * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å I §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
          *   :::::: U S E F U L   S I M P L E   F U N C T I O N S : :  :   :    :     :        :          :
-         * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+         * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
          */
 
 /**
@@ -251,7 +253,9 @@ RANGE getNum(FILE *fp, int index)
         fseek(fp, index * sizeof(RANGE), SEEK_END);
     else
         fseek(fp, index * sizeof(RANGE), SEEK_SET);
-    fread(&num, sizeof(num), 1, fp);
+    if (feof(fp))
+        return 0;
+    MYFREAD(&num, sizeof(num), 1, fp);
 
     // restore curpos
     fseek(fp, CurPos, SEEK_SET);
@@ -269,17 +273,25 @@ int checkLegal(const char filename[], int mode)
         fprintf(stderr, "***cannot READ \"%s\"!\n", filename);
         exit(FILE_READ);
     }
-    RANGE previous, thisone, lastone = getNum(fp, -2);
+    RANGE previous, thisone, lastone;
+    if (getNum(fp, 0) != STDTERMI)
+        lastone = getNum(fp, -2);
+    else
+    {
+        fprintf(stderr, "***Illegal PnFile!\n");
+        exit(PNTAB_ILLEGAL);
+    }
     int legal = 1; //default as legal
-    fread(&previous, sizeof(RANGE), 1, fp);
+    MYFREAD(&previous, sizeof(RANGE), 1, fp);
     thisone = previous;
-    printf("Check Start at %llu.\n", thisone);
+    lastone -= thisone;
+    printf("-->Check Start: [%llu, %llu].\n", thisone, lastone);
     switch (mode)
     {
         /*
-         * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ II 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+         * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å II §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
          *   :::::: O P T I M I Z E   T H I S : :  :   :    :     :        :          :
-         * 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+         * §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å
          */
 
     case 0: // simple mode
@@ -294,11 +306,13 @@ int checkLegal(const char filename[], int mode)
                 break;
             }
 
-            fread(&thisone, sizeof(RANGE), 1, fp);
+            MYFREAD(&thisone, sizeof(RANGE), 1, fp);
             if (thisone <= previous)
             {
-                fprintf(stderr, "***thisone(%llu) should be \
+                long failed_addr = ftell(fp);
+                fprintf(stderr, "***0x%lx:thisone(%llu) should be \
 greater than previous(%llu)!\n",
+                        failed_addr,
                         thisone,
                         previous);
                 exit(PNTAB_ILLEGAL);
@@ -319,14 +333,17 @@ greater than previous(%llu)!\n",
             }
             if (prime(thisone) == 0)
             {
-                fprintf(stderr, "***thisone(%llu) is not a prime!\n", thisone);
+                long failed_addr = ftell(fp);
+                fprintf(stderr, "***0x%lx:thisone(%llu) is not a prime!\n", failed_addr, thisone);
                 exit(PNTAB_ILLEGAL);
             }
-            fread(&thisone, sizeof(RANGE), 1, fp);
+            MYFREAD(&thisone, sizeof(RANGE), 1, fp);
             if (thisone <= previous)
             {
-                fprintf(stderr, "***thisone(%llu) should be \
+                long failed_addr = ftell(fp);
+                fprintf(stderr, "***0x%lx:thisone(%llu) should be \
 greater than previous(%llu)!\n",
+                        failed_addr,
                         thisone,
                         previous);
                 exit(PNTAB_ILLEGAL);
@@ -342,7 +359,7 @@ greater than previous(%llu)!\n",
         printf("Unkown mode.\n");
         break;
     }
-    printf("\nCheck End at %llu.\n", lastone);
+    printf("\n<--Check End.\n");
     fclose(fp);
     return legal; //nonzero return if legal
 }
@@ -384,7 +401,7 @@ void finiPnTab(RANGE begin, RANGE delta)
 #endif
     // open many files for async write
     printf("-->Finishing temp Pn Tab files...\n");
-    system("mkdir tmp");
+    MYSYSTEM("mkdir tmp");
     for (int i = 0; i < GEN_THREADS; i++)
     {
         printf("\rCreating Thread %d.", i);
@@ -401,13 +418,13 @@ void finiPnTab(RANGE begin, RANGE delta)
         threads_info[i].id = i;
         threads_info[i].start = start_number == 0 ? begin : getNextPrime(start_number);
         threads_info[i].end = end;
-        threads_info[i].newdelta = GEN_THREADS * delta;
+        threads_info[i].newdelta = GEN_THREADS * delta; // maybe change to a const
         threads_info[i].fp = fp;
         threads_info[i].pm = &pm;
-        begin = end + 1;
+        begin = end;
         end += delta;
 #ifdef DEBUG
-        printf("{Thread %d, start:%llu, end:%llu, newdelta:%llu}\n",
+        printf("{Thread:%d, start:%llu, end:%llu, newdelta:%llu}\n",
                threads_info[i].id, threads_info[i].start, threads_info[i].end, threads_info[i].newdelta);
 #endif
     }
@@ -415,4 +432,4 @@ void finiPnTab(RANGE begin, RANGE delta)
     printf("<--Temp Pn Table file finished!\nLegal check result: %d.\n",
            checkLegal(PNFILE, 0));
 }
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/* §ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å§ä??§å */

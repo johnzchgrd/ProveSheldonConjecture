@@ -17,9 +17,9 @@ typedef unsigned long long RANGE; // if modified, IO format
 //pn tab gen threads settings.
 #define _NO_DEFAULT_ //NOTE define this to generate Pn table starts from any number legally allowed.
 #ifdef _NO_DEFAULT_
-#define GEN_START (RANGE)2010099973
-#define GEN_DELTA (RANGE)   100000
-#define GEN_THREADS 10
+#define GEN_START (RANGE)2510099973
+#define GEN_DELTA (RANGE)500000
+#define GEN_THREADS 400
 #else //_NO_DEFAULT_
 #define GEN_START START
 #define GEN_DELTA DELTA
@@ -37,6 +37,31 @@ typedef unsigned long long RANGE; // if modified, IO format
 // Pn Table Generation default thread setting.
 #define PNFILE "Pn.tab"
 #define GEN_END (RANGE)(GEN_DELTA * GEN_THREADS + GEN_START)
+//
+#define MYSYSTEM(cmd)                                                                   \
+    switch (system(#cmd))                                                               \
+    {                                                                                   \
+    case 1:                                                                             \
+        break;                                                                          \
+    case 0:                                                                             \
+        fprintf(stderr, "No shell avaliable!\n");                                       \
+        break;                                                                          \
+    case -1:                                                                            \
+        fprintf(stderr, "Can't create child process or its status can'be retrived!\n"); \
+        break;                                                                          \
+    case 127:                                                                           \
+        fprintf(stderr, "Command " #cmd " execution failed!\n");                        \
+        break;                                                                          \
+    default:                                                                            \
+        break;                                                                          \
+    }
+
+#define MYFREAD(cmd1, cmd2, cmd3, cmd4)                           \
+    if (fread(cmd1, cmd2, cmd3, cmd4) != (cmd3))                  \
+    {                                                             \
+        fprintf(stderr, "Error while reading file(%p)!\n", cmd4); \
+        exit(FILE_READ);                                          \
+    }
 // exit code enumerator
 enum ErrorTable
 {

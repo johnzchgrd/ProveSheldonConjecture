@@ -27,12 +27,13 @@
  * 2019-09-07 Jonzchgrd
  *    deprecate function `getLastNum()` in replace of getNum()
  *    verified new domain.
+ * 2019-09-28 Johnzchgrd
+ *    add return value check for system() and fread() using Macros.
  * 
  */
 
 /*TODO
  * 1.Add pthread_cancel
- * 2.Check functions' return value to eliminate warnings thrown by the Compiler.
  * 3.add filename:line to functions' debug info(when DEBUG is defined).
  * 
  */
@@ -73,7 +74,7 @@ int main(int argc, char *argv[])
 		printf("Search finished.\n");
 		break;
 	case '3':
-		printf("Legal Pn table file Check: %d.\n", checkLegal(PNFILE, 1));
+		printf("Legal Pn table file Check: %d.\n", checkLegal(PNFILE, argv[1][1]));
 		break;
 	default:
 		printf("Invalid argument!\n");
@@ -87,6 +88,6 @@ int main(int argc, char *argv[])
 	// show caret
 	printf("\033[?25h");
 #endif // SHOW_PROGRESS
-	//system("shutdown /s");
+	//MYSYSTEM("shutdown /s");
 	return 0;
 }
