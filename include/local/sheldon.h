@@ -18,8 +18,8 @@ typedef unsigned long long RANGE; // if modified, IO format
                      starts from any number legally allowed.*/
 #ifdef _NO_DEFAULT_
 #define GEN_START (RANGE)2
-#define GEN_DELTA (RANGE)100
-#define GEN_THREADS 20
+#define GEN_DELTA (RANGE)10000000
+#define GEN_THREADS 50
 #else //_NO_DEFAULT_
 #define GEN_START START
 #define GEN_DELTA DELTA

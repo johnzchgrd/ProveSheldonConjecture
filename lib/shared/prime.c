@@ -1,4 +1,6 @@
 #include <local/sheldon.h>
+#include <sys/stat.h>
+#include <sys/types.h>
 
 /* --------------------------------- GENERAL -------------------------------- */
 /**
@@ -92,6 +94,7 @@ static void *partialPnTab(void *arg)
         if (prime(i) == 1)
         {
             fwrite(&i, sizeof(i), 1, pn->fp);
+            fflush(pn->fp);
         }
     }
 #ifndef _ALL_LEGAL_
@@ -99,6 +102,7 @@ static void *partialPnTab(void *arg)
     {
 #endif // _ALL_LEGAL_
         fwrite(&termi, sizeof(termi), 1, pn->fp);
+        fflush(pn->fp);
 #ifndef _ALL_LEGAL_
     }
 #endif // _ALL_LEGAL_
@@ -199,7 +203,8 @@ void initPnTab(RANGE begin, RANGE delta)
     RANGE start = begin, end = begin + delta;
     // single PM
     ProgManager pm = {0ULL, 0, 0};
-    MYSYSTEM("mkdir tmp");
+    if (mkdir("tmp", 0755) != 0)
+        perror("Mkdir failed: ");
     for (int i = 0; i < GEN_THREADS; i++)
     {
         // open different file for async write
@@ -272,7 +277,7 @@ void cat_all_tmp_files()
             if (fflush(fp_write) != 0)
                 exit(FILE_WRITE);
             // refresh new set of thisone, pre &prepre
-            if (!MYFREAD(&thisone, sizeof(thisone), 1, fp))
+            if (MYFREAD(&thisone, sizeof(thisone), 1, fp) != 1)
                 break;
             prepre = pre;
             pre = thisone;
@@ -315,9 +320,8 @@ RANGE getNum(FILE *fp, int index)
         fseek(fp, index * sizeof(RANGE), SEEK_END);
     else
         fseek(fp, index * sizeof(RANGE), SEEK_SET);
-    if (feof(fp))
+    if (MYFREAD(&num, sizeof(num), 1, fp) != 1)
         return 0;
-    MYFREAD(&num, sizeof(num), 1, fp);
 
     // restore curpos
     fseek(fp, CurPos, SEEK_SET);
@@ -335,19 +339,19 @@ int checkLegal(const char filename[], int mode)
         fprintf(stderr, "***cannot READ \"%s\"!\n", filename);
         exit(FILE_READ);
     }
-    RANGE previous, thisone, lastone;
-    if (getNum(fp, 0) != STDTERMI)
+    RANGE previous, thisone, lastone, end;
+    if ((end = getNum(fp, -1)) == STDTERMI)
         lastone = getNum(fp, -2);
     else
     {
-        fprintf(stderr, "***Illegal PnFile!\n");
+        fprintf(stderr, "***Illegal PnFile: END with %llu instead of %llu.\n", end, STDTERMI);
         exit(PNTAB_ILLEGAL);
     }
     int legal = 1; //default as legal
     MYFREAD(&previous, sizeof(RANGE), 1, fp);
     thisone = previous;
+    printf("-->Check range=[%llu, %llu].\n", thisone, lastone);
     lastone -= thisone;
-    printf("-->Check Start: [%llu, %llu].\n", thisone, lastone);
     switch (mode)
     {
         /*
@@ -362,18 +366,17 @@ int checkLegal(const char filename[], int mode)
         {
             if (thisone == STDTERMI)
                 break;
-            if (feof(fp) && legal == 1)
+            if (MYFREAD(&thisone, sizeof(RANGE), 1, fp) != 1 && legal == 1)
             {
                 legal = 0;
                 break;
             }
 
-            MYFREAD(&thisone, sizeof(RANGE), 1, fp);
             if (thisone <= previous)
             {
                 long failed_addr = ftell(fp);
-                fprintf(stderr, "***0x%lx:thisone(%llu) should be"
-                                "greater than previous(%llu)!\n",
+                fprintf(stderr, "***failed@0x%lx:thisone(0x%llx) should be"
+                                "greater than previous(0x%llx)!\n",
                         failed_addr,
                         thisone,
                         previous);
@@ -463,7 +466,8 @@ void finiPnTab(RANGE begin, RANGE delta)
 #endif
     // open many files for async write
     printf("-->Finishing temp Pn Tab files...\n");
-    MYSYSTEM("mkdir tmp");
+    if (mkdir("tmp", 0755) != 0)
+        perror("Mkdir failed: ");
     for (int i = 0; i < GEN_THREADS; i++)
     {
         printf("\rCreating Thread %d.", i);
@@ -475,16 +479,37 @@ void finiPnTab(RANGE begin, RANGE delta)
             fprintf(stderr, "***cannot ADD to \"%s\"!\n", FileNameTmp);
             exit(FILE_ADD);
         }
-        RANGE start_number = getNum(fp, -2);
-        // initialize
-        threads_info[i].id = i;
-        threads_info[i].start = start_number == 0 ? begin : getNextPrime(start_number);
-        threads_info[i].end = end;
-        threads_info[i].newdelta = threads_info[i].end - threads_info[i].start;
-        threads_info[i].fp = fp;
-        threads_info[i].pm = &pm;
-        begin = end;
-        end += delta;
+        RANGE start_number = getNum(fp, -1);
+        RANGE previous_end = end; //used for range validity check, currently useless
+#ifdef _ALL_LEGAL_
+        if (start_number != STDTERMI) //unfinished
+        {
+            // initialize
+#endif //_ALL_LEGAL_
+            threads_info[i].id = i;
+            threads_info[i].start = start_number == 0 ? begin : getNextPrime(start_number);
+            threads_info[i].end = end;
+            threads_info[i].newdelta = threads_info[i].end - threads_info[i].start;
+            threads_info[i].fp = fp;
+            threads_info[i].pm = &pm;
+            previous_end = end;
+            begin = end;
+            end += delta;
+#ifdef _ALL_LEGAL_
+        }
+        else // already finished
+        {
+            threads_info[i].id = i;
+            threads_info[i].start = start_number == 0 ? begin : getNextPrime(start_number);
+            threads_info[i].end = end;
+            threads_info[i].newdelta = threads_info[i].end - threads_info[i].start;
+            threads_info[i].fp = fp;
+            threads_info[i].pm = &pm;
+            begin = end;
+            end += delta;
+        }
+#endif //_ALL_LEGAL_
+
 #ifdef DEBUG
         printf("{Thread:%d, start:%llu, end:%llu, newdelta:%llu}\n",
                threads_info[i].id, threads_info[i].start, threads_info[i].end, threads_info[i].newdelta);
