@@ -8,7 +8,7 @@ SRC_PATH = ./shared
 # Space-separated pkg-config libraries used by this project
 LIBS =
 # General compiler flags
-COMPILE_FLAGS = -std=c99 -fPIC -shared -pthread -lm -DTOTAL 
+COMPILE_FLAGS = -fPIC -shared -pthread -lm -DTOTAL 
 # Additional release-specific flags
 RCOMPILE_FLAGS = -O3 -Wall -Wextra
 # Additional debug-specific flags

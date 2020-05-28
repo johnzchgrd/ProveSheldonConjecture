@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef __linux__
-#include <pthread.h> //! Windows MAY not *natively* support this.
-#endif
+#include <pthread.h>
 #include <time.h>
 #include <assert.h>
 #include <math.h>
@@ -11,15 +9,17 @@ typedef unsigned long long RANGE; // if modified, IO format
                                   //for printf&scanf should too.
 #define SHOW_PROGRESS
 //main threads func settings.
-#define START 2 //!currently don't support other begin point because of we'reusing Pn table to locate.
-#define DELTA (RANGE)10000
+#define START 2 /*!currently don't support other begin point \
+                 because of we're using Pn table to locate.*/
+#define DELTA (RANGE)100
 #define THREADS 10
 //pn tab gen threads settings.
-#define _NO_DEFAULT_ //NOTE define this to generate Pn table starts from any number legally allowed.
+#define _NO_DEFAULT_ /*NOTE define this to generate Pn table \
+                     starts from any number legally allowed.*/
 #ifdef _NO_DEFAULT_
-#define GEN_START (RANGE)2510099973
-#define GEN_DELTA (RANGE)500000
-#define GEN_THREADS 400
+#define GEN_START (RANGE)2
+#define GEN_DELTA (RANGE)100
+#define GEN_THREADS 20
 #else //_NO_DEFAULT_
 #define GEN_START START
 #define GEN_DELTA DELTA
@@ -28,7 +28,7 @@ typedef unsigned long long RANGE; // if modified, IO format
 // flags
 #define STDTERMI -1ULL      //represents a legal eof of Pn tab generation, or "18446744073709551615"
 #define SHOW_MODE 1         //?seem to be useless
-#define USE_FAST_PRODUCTION //?
+#define USE_FAST_PRODUCTION //?i don't know why i created it??
 #undef _ALL_LEGAL_          // in case tmp files are not believed to be legal
 // file names and ENDs
 #define OUTFILE "0.out"
@@ -44,7 +44,8 @@ typedef unsigned long long RANGE; // if modified, IO format
     case 1:                                                                             \
         break;                                                                          \
     case 0:                                                                             \
-        fprintf(stderr, "No shell avaliable!\n");                                       \
+        if (#cmd == NULL)                                                               \
+            fprintf(stderr, "No shell avaliable!\n");                                   \
         break;                                                                          \
     case -1:                                                                            \
         fprintf(stderr, "Can't create child process or its status can'be retrived!\n"); \
@@ -56,12 +57,13 @@ typedef unsigned long long RANGE; // if modified, IO format
         break;                                                                          \
     }
 
-#define MYFREAD(cmd1, cmd2, cmd3, cmd4)                           \
-    if (fread(cmd1, cmd2, cmd3, cmd4) != (cmd3))                  \
-    {                                                             \
-        fprintf(stderr, "Error while reading file(%p)!\n", cmd4); \
-        exit(FILE_READ);                                          \
+#define MYFREAD1(cmd1, cmd2, cmd3, cmd4)                                    \
+    if (fread(cmd1, cmd2, cmd3, cmd4) != (cmd3))                            \
+    {                                                                       \
+        fprintf(stderr, ">>>error@%s:%d:FILE_READ!\n", __FILE__, __LINE__); \
+        exit(FILE_READ);                                                    \
     }
+#define MYFREAD(cmd1, cmd2, cmd3, cmd4) (fread(cmd1, cmd2, cmd3, cmd4) == (cmd3))
 // exit code enumerator
 enum ErrorTable
 {
@@ -71,6 +73,7 @@ enum ErrorTable
     FILE_WRITE,       //
     FILE_ADD,         //
     FILE_EXIST,       //
+    INVALID_DIR,      //
     THREAD_CREATE,    // thread_create returns zero
     THREAD_JOIN,      // unused
     PNTAB_ILLEGAL,    // used in checkLegal function
@@ -134,6 +137,7 @@ void initPnTab(RANGE begin, RANGE delta);
 int checkLegal(const char filename[], int mode);
 void finiPnTab(RANGE begin, RANGE delta);
 RANGE getNum(FILE *fp, int index);
+void cat_all_tmp_files();
 #endif // _PRIME_C_
 
 #ifndef _ERR_HANDLE_C_

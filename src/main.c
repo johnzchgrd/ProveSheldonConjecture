@@ -71,7 +71,7 @@ int main(int argc, char *argv[])
 	case '2':
 		printf("Total Time: %ldms.\n", getRunTime(MultiThread, NULL));
 		//once this is an unreachable sentence...
-		printf("Search finished.\n");
+		printf("Search finished. Result in \"%s\".\n", OUTFILE);
 		break;
 	case '3':
 		printf("Legal Pn table file Check: %d.\n", checkLegal(PNFILE, argv[1][1]));
